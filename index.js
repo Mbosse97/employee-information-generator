@@ -2,8 +2,8 @@
 // create system architecture of classes and subclass extensions         DONE
 // import inguirer and jest                                DONE
 // create prompts for employee information for entire team (only exit when no more employees to add)      DONE
-// generate HTML file based on employee information
-// create styling for generated html
+// generate HTML file based on employee information          DONE
+// create styling for generated html                DONE
 // create tests for value passing within classes and for the operations performed       DONE
 
 const fs = require('fs');
@@ -12,6 +12,12 @@ const Employee = require('./lib/Employee.js');
 const Engineer = require('./lib/Engineer.js');
 const Manager = require('./lib/Manager.js');
 const Intern = require('./lib/Intern.js');
+
+const {bootstrap,
+	header,
+	bodyTop, 
+    footer } = require("./lib/html.js");
+
 
 const managerQuestions = [
     {
@@ -92,21 +98,18 @@ const internQuestions = [
     }
 ]
 
-// function writeHtml(filename,data){
-//     fs.writeFile(`${filename}`,data.(err) =>
-//     err ? console.log(err) : console.log("Successfully Created HTML File!")
-//     )
-// }
 
 manager = [];
 interns = [];
 engineers = [];
 
+let html = header + bodyTop;
 
 async function questionOrder(){
     await inquirer.prompt(managerQuestions)
     .then ((info) => {
         manager.push (new Manager(info.name, info.id, info.email, info.officeNumber));
+        html + manager
     })
     response = await inquirer.prompt(employeeQuestion);
     while (response.employees === 'Add an Engineer' || response.employees === 'Add an Intern') {
@@ -131,13 +134,27 @@ async function questionOrder(){
                     break;
                 }
             })
-    console.log(manager);
-    console.log(engineers);
-    console.log(interns);
         response = await inquirer.prompt(employeeQuestion)
+
     }
-    
-    
+
+    html += manager.map((Manager) => Manager.getCard()).join("")
+    + engineers.map((Engineer) => Engineer.getCard()).join("")
+    + interns.map((Intern) => Intern.getCard()).join("")
+
+    return html;
 }
 
-questionOrder();
+function writeHtml(html) {
+    fs.writeFile("./dist/index.html", html, (err) =>
+      err ? console.log(err) : console.log("HTML file written!")
+    );
+    return 0;
+  }
+
+async function init() {
+    writeHtml(await questionOrder());
+    return 0;
+}
+
+init();
