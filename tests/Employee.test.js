@@ -1,4 +1,4 @@
-const { describe } = require("node:test");
+// const { describe } = require("node:test");
 const Employee = require("../lib/Employee");
 
 describe("Employee", () => {
@@ -22,7 +22,7 @@ describe("Employee", () => {
         it("should return the email of the constructed employee", () => {
             const employee = new Employee("michael","1","michael@email.com");
             const email = employee.getEmail();
-            expect(email).toEqual("michael@gmail.com");
+            expect(email).toEqual("michael@email.com");
         })
     });
 

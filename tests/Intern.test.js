@@ -1,4 +1,4 @@
-const { describe } = require("node:test");
+// const { describe } = require("node:test");
 const Intern = require("../lib/Intern");
 
 describe("Intern", () => {
